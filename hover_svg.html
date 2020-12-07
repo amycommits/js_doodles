@@ -1,0 +1,80 @@
+<html>
+<body>
+<svg id="main" width="200" height="200"></svg>
+<script>
+  const mainSvg = document.querySelector("#main")
+  const radius = 30
+  let isHovered = false
+  mainSvg.setAttribute("width", window.innerWidth)
+  mainSvg.setAttribute("height", window.innerHeight)
+  
+  const circleAttributes = [{
+    cy: `${window.innerHeight * .1}`,
+    cx: `${window.innerWidth * .5}`,
+    r: `${radius}`,
+    fill: 'red',
+    class: 'top'
+  },
+  {
+    cy: `${window.innerHeight * .25}`,
+    cx: `${window.innerWidth * .80}`,
+    r: `${radius}`,
+    fill: 'darkorange',
+    class: 'top-right'
+  },
+  {
+    cy: `${window.innerHeight * .75}`,
+    cx: `${window.innerWidth * .80}`,
+    r: `${radius}`,
+    fill: 'orange',
+    class: 'bottom-right'
+  },
+  {
+    cy: `${window.innerHeight * .75}`,
+    cx: `${window.innerWidth * .2}`,
+    r: `${radius}`,
+    fill: 'green',
+    class: 'bottom-left'
+  },
+  ,
+  {
+    cy: `${window.innerHeight * .25}`,
+    cx: `${window.innerWidth * .2}`,
+    r: `${radius}`,
+    fill: 'yellow',
+    class: 'top-left'
+  },
+  ]
+  const lineCoordinates = []
+  function hoveredCircle(e) {
+    const thisX = e.target.attributes.cx.nodeValue
+    const thisY = e.target.attributes.cy.nodeValue
+    if (lineCoordinates.filter(coordinate => { return coordinate.x === thisX && coordinate.y === thisY}).length === 0) {
+      lineCoordinates.push({x: thisX, y: thisY})
+    }
+    
+    if (lineCoordinates.length > 1) {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', `${lineCoordinates[lineCoordinates.length - 2].x}`)
+      line.setAttribute('x2', `${lineCoordinates[lineCoordinates.length - 1].x}`)
+      line.setAttribute('y1', `${lineCoordinates[lineCoordinates.length - 2].y}`)
+      line.setAttribute('y2', `${lineCoordinates[lineCoordinates.length - 1].y}`)
+      line.style.fill = "blue"
+      line.style.stroke = "blue"
+      line.style.width = "2"
+      mainSvg.appendChild(line)
+    }
+  }
+  circleAttributes.forEach(circleAttribute => {
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    for (const [key, value] of Object.entries(circleAttribute)) {
+      circle.setAttribute(key, value)
+    }
+    circle.addEventListener('mouseover', hoveredCircle)
+
+    mainSvg.appendChild(circle)
+  })
+  
+</script>
+</body>
+</html>
